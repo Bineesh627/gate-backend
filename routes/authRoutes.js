@@ -28,7 +28,8 @@ router.post('/login', loginLimiter, async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email and password are required.' });
     }
 
-    const [rows] = await pool.query('SELECT * FROM admins WHERE email = ? OR username = ? LIMIT 1', [email, email]);
+    const cleanEmail = email.trim();
+    const [rows] = await pool.query('SELECT * FROM admins WHERE email = ? LIMIT 1', [cleanEmail]);
     if (rows.length === 0) {
       return res.status(401).json({ success: false, message: 'Invalid credentials.' });
     }
@@ -135,12 +136,12 @@ router.post('/forgot-password', loginLimiter, async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) {
-      return res.status(400).json({ success: false, message: 'Admin email or username is required.' });
+      return res.status(400).json({ success: false, message: 'Admin email is required.' });
     }
 
     const [rows] = await pool.query(
-      'SELECT id, username, email, password FROM admins WHERE email = ? OR username = ? LIMIT 1',
-      [email.trim(), email.trim()]
+      'SELECT id, username, email, password FROM admins WHERE email = ? LIMIT 1',
+      [email.trim()]
     );
 
     if (rows.length === 0) {
@@ -203,8 +204,8 @@ router.post('/reset-password', loginLimiter, async (req, res) => {
     }
 
     const [rows] = await pool.query(
-      'SELECT id, username, email, password FROM admins WHERE email = ? OR username = ? LIMIT 1',
-      [email.trim(), email.trim()]
+      'SELECT id, username, email, password FROM admins WHERE email = ? LIMIT 1',
+      [email.trim()]
     );
 
     if (rows.length === 0) {

@@ -199,7 +199,7 @@ export async function initializeDatabase() {
         'INSERT INTO admins (username, email, password) VALUES (?, ?, ?)',
         ['admin', 'marketing@gateuae.com', hashedPassword]
       );
-      console.log('👤 Created default admin user: admin@gatehypermarket.ae (password: admin123)');
+      console.log('👤 Created default admin user: example@gmail.com (password: admin123)');
     }
 
     // Note: Predefined seed data has been completely removed.
